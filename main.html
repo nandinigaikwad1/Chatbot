@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT-like Chatbot</title>
+<style>
+    /* === Body and container === */
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #343541;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #chat-container {
+        width: 400px;
+        height: 600px;
+        background-color: #444654;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* === Chat messages === */
+    #chat-box {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .message {
+        max-width: 75%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        word-wrap: break-word;
+        line-height: 1.4;
+        font-size: 14px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .user {
+        align-self: flex-end;
+        background-color: #10a37f;
+        color: white;
+        border-bottom-right-radius: 0;
+    }
+
+    .bot {
+        align-self: flex-start;
+        background-color: #e5e5ea;
+        color: #000;
+        border-bottom-left-radius: 0;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(10px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* === Input area === */
+    #input-container {
+        display: flex;
+        padding: 10px;
+        background-color: #40414f;
+    }
+
+    #input {
+        flex: 1;
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        color: #fff;
+        background-color: #565869;
+    }
+
+    #send-btn {
+        margin-left: 10px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 50%;
+        background-color: #10a37f;
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #send-btn:hover {
+        background-color: #0e8a6f;
+    }
+
+</style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-box"></div>
+    <div id="input-container">
+        <input type="text" id="input" placeholder="Type your message..." />
+        <button id="send-btn">➤</button>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send-btn');
+
+    // Simple AI responses for demo (replace with API for real AI)
+    const botResponses = {
+        "hi": "Hello! How can I help you today?",
+        "hello": "Hi there! I'm your friendly chatbot.",
+        "how are you": "I'm a bot, but I'm doing great! How about you?",
+        "bye": "Goodbye! Have a nice day!",
+        "what is your name": "I'm ChatBot,Nandu's virtual assistant.",
+        "aur bata": "Chal Apna kaam kar.",
+        "tell me a joke": "Why did the scarecrow win an award? Because he was outstanding in his field!",
+        "help": "Sure! Ask me anything or type 'bye' to end the chat.",
+        "thanks": "You're welcome! If you have more questions, feel free to ask.",
+        "what can you do": "I can chat with you, tell jokes, and help with simple questions!",
+        "bye": "See you later! Take care!",
+        "kuch kaam ka nhi hai tu":botReply("Bhai tu bhi kuch kar le apna kaam."),
+        "mujhe mt sikha": "me toh sikhauga",
+        "tu rehta kaha hai": "main toh milind nagar me rehta hu",
+        "kya kar raha hai": "bas tumse baat kar raha hu",
+        "tujhe maine banaya hai": "ha pta hai mujhe nandu ne banaya hai",
+        "tujhe kisne banaya hai": "mujhe nandu ne banaya hai",
+        "default": "me ek chapri bot hu jo nandu ne banaya hai"
+    };
+
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        msgDiv.textContent = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function botReply(userText) {
+        addMessage("Typing...", "bot");
+        setTimeout(() => {
+            const typingDiv = chatBox.querySelector('.bot:last-child');
+            const reply = botResponses[userText.toLowerCase()] || botResponses["default"];
+            typingDiv.textContent = reply;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 800);
+    }
+
+    function sendMessage() {
+        const userText = input.value.trim();
+        if (!userText) return;
+        addMessage(userText, "user");
+        input.value = "";
+        botReply(userText);
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+</script>
+
+</body>
+</html>
